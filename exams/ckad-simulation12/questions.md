@@ -446,8 +446,8 @@ It should map to the external name `database.external.example.com`.
 Create a canary deployment for the existing `api-deploy` Deployment in the `void` namespace.
 
 - The canary should have 1 replica and the label `version=canary`.
-- Use the same image as the main Deployment but with an environment variable `CANARY=true`.
-- Ensure the canary pods receive traffic only from a Service that selects both the main and canary pods.
+- Ensure the canary pods receive traffic from the Service `void-svc'
+- Ensure the main deployment receives traffic from the Service `void-svc'
 
 ---
 ---
