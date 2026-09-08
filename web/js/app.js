@@ -1207,18 +1207,22 @@ function toggleHint(hintBox) {
 function flashCopied(element) {
     if (!element) return;
 
-    element.classList.add('copied');
-    const previousTitle = element.getAttribute('title') || 'Copy';
-    const previousTooltip = element.dataset.tooltip || 'Copy';
+    // Restore target is read from a stable attribute stashed once at bind
+    // time (see bindCopyableInlineValues), not from the element's current
+    // title/tooltip. Reading the current value here would pick up "Copied!"
+    // itself on a second click within the reset window, permanently
+    // sticking the label on "Copied!".
+    const originalLabel = element.dataset.copyLabel || 'Copy';
 
+    element.classList.add('copied');
     element.dataset.tooltip = 'Copied!';
     element.setAttribute('title', 'Copied!');
     clearTimeout(element.copyResetTimer);
 
     element.copyResetTimer = setTimeout(() => {
         element.classList.remove('copied');
-        element.dataset.tooltip = previousTooltip;
-        element.setAttribute('title', previousTitle);
+        element.dataset.tooltip = originalLabel;
+        element.setAttribute('title', originalLabel);
     }, 900);
 }
 
@@ -1250,14 +1254,31 @@ async function copyInlineCodeValue(codeElement) {
     copyTextWithFallback(text, codeElement);
 }
 
+function copyInlineCodeElement(codeElement) {
+    copyInlineCodeValue(codeElement).catch(() => {
+        copyTextWithFallback(codeElement.textContent, codeElement);
+    });
+}
+
 function handleInlineCodeClick(event) {
     const codeElement = event.target.closest('code');
     if (!codeElement || codeElement.closest('pre')) return;
 
     event.preventDefault();
-    copyInlineCodeValue(codeElement).catch(() => {
-        copyTextWithFallback(codeElement.textContent, codeElement);
-    });
+    copyInlineCodeElement(codeElement);
+}
+
+// Delegated on the container (not per-element) so it keeps working even when
+// hint/tip/note processing rebuilds the DOM via innerHTML after this binds
+// (see processHints) - listeners on the old <code> nodes would otherwise be lost.
+function handleInlineCodeKeydown(event) {
+    if (event.key !== 'Enter' && event.key !== ' ') return;
+
+    const codeElement = event.target.closest('code');
+    if (!codeElement || codeElement.closest('pre')) return;
+
+    event.preventDefault();
+    copyInlineCodeElement(codeElement);
 }
 
 function bindCopyableInlineValues(root) {
@@ -1265,6 +1286,7 @@ function bindCopyableInlineValues(root) {
 
     if (root.dataset.copyHandlerBound !== 'true') {
         root.addEventListener('click', handleInlineCodeClick);
+        root.addEventListener('keydown', handleInlineCodeKeydown);
         root.dataset.copyHandlerBound = 'true';
     }
 
@@ -1273,19 +1295,11 @@ function bindCopyableInlineValues(root) {
 
         element.dataset.copyBound = 'true';
         element.classList.add('copyable-value');
+        element.dataset.copyLabel = 'Copy';
         element.dataset.tooltip = 'Copy';
         element.title = 'Copy';
         element.setAttribute('aria-label', 'Copy value');
         element.setAttribute('tabindex', '0');
-
-        element.addEventListener('keydown', (event) => {
-            if (event.key === 'Enter' || event.key === ' ') {
-                event.preventDefault();
-                copyInlineCodeValue(element).catch(() => {
-                    copyTextWithFallback(element.textContent, element);
-                });
-            }
-        });
     });
 }
 
