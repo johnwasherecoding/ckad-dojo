@@ -2,7 +2,6 @@
 # CKAD Simulation 15 - Scoring Functions
 # Total Points: 110
 
-
 # Q1: 5 points
 
 CURRENT_EXAM_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

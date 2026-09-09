@@ -2,7 +2,6 @@
 # CKAD Simulation 18 - Scoring Functions
 # DOJO_NAME="Dojo Izanagi"
 
-
 # Q1: 6 points
 
 CURRENT_EXAM_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
