@@ -173,6 +173,20 @@ class TestParseQuestionsMd:
         assert questions[1]["topic"] == "Pods"
         assert questions[1]["points"] == 3
 
+    def test_metadata_edge_cases(self, tmp_exam_with_edge_cases: Path):
+        """Test parsing of edge-case metadata: placeholder dashes, resources field, etc."""
+        with patch.object(server, "EXAMS_DIR", tmp_exam_with_edge_cases / "exams"):
+            questions = server.parse_questions_md("ckad-edge-cases")
+
+        assert len(questions) == 1
+        q = questions[0]
+        assert q["id"] == "1"
+        assert q["topic"] == "Edge Cases"
+        assert q["points"] == 0  # Zero points from "0/100 (0%)"
+        assert q["namespace"] == "-"  # Placeholder dash preserved
+        assert q["resources"] == "`ConfigMap`, `Secret`"  # Resources with backticks preserved
+        assert q["files"] == "`./exam/course/1/edge-case.yaml`"  # Files from "File to create"
+
     def test_nonexistent_file(self, tmp_path: Path):
         with patch.object(server, "EXAMS_DIR", tmp_path / "exams"):
             questions = server.parse_questions_md("nonexistent")
