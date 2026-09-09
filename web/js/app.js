@@ -1216,13 +1216,11 @@ function flashCopied(element) {
 
     element.classList.add('copied');
     element.dataset.tooltip = 'Copied!';
-    element.setAttribute('title', 'Copied!');
     clearTimeout(element.copyResetTimer);
 
     element.copyResetTimer = setTimeout(() => {
         element.classList.remove('copied');
         element.dataset.tooltip = originalLabel;
-        element.setAttribute('title', originalLabel);
     }, 900);
 }
 
@@ -1297,7 +1295,6 @@ function bindCopyableInlineValues(root) {
         element.classList.add('copyable-value');
         element.dataset.copyLabel = 'Copy';
         element.dataset.tooltip = 'Copy';
-        element.title = 'Copy';
         element.setAttribute('aria-label', 'Copy value');
         element.setAttribute('tabindex', '0');
     });
