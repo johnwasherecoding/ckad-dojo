@@ -140,6 +140,8 @@ There is a conflict causing issues. The Deployment specifies 5 replicas, while t
 2. Ensure the HPA targets the Deployment correctly and has CPU utilization target set to 75%.
 3. Scale the Deployment manually to 3 replicas (which the HPA might later override, but just perform the scale action if possible, or ensure it rests at min replicas). Actually, just fix the HPA to target 75% CPU and min 2 max 10.
 
+**Note**: This question requires a metrics-server pod to be installed on your minikube cluster. To install it run: `minikube addons enable metrics-server`
+
 ---
 
 ## Question 7 | Deployment with minReadySeconds

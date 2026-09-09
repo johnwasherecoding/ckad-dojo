@@ -69,7 +69,7 @@ Use `kubectl autoscale` or create the HPA manifest directly.
 
 Verify the HPA is created with `kubectl get hpa`.
 
-**Note**: If metrics-server is not installed, the HPA will show `<unknown>` for current metrics. This is expected.
+**Note**: This question requires a metrics-server pod to be installed on your minikube cluster. To install it run: `minikube addons enable metrics-server`
 
 ---
 

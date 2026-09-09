@@ -213,6 +213,8 @@ Create a HorizontalPodAutoscaler for Deployment `app-deploy` in namespace `root`
 
 **Hint**: Use `kubectl autoscale deployment` command.
 
+**Note**: This question requires a metrics-server pod to be installed on your minikube cluster. To install it run: `minikube addons enable metrics-server`
+
 ---
 
 ## Question 10 | Deployment Rollout Pause and Resume

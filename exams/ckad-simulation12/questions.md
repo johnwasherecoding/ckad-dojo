@@ -219,6 +219,8 @@ Find the Pod in the `kube-system` namespace that is consuming the most CPU.
 Write the name of the Pod into the file `./exam/course/12/q10/cpu-usage.txt`.
 (If multiple pods are similar, just record the top one based on `kubectl top`).
 
+**Note**: This question requires a metrics-server pod to be installed on your minikube cluster. To install it run: `minikube addons enable metrics-server`
+
 ---
 
 ## Question 11 | Application Observability and Maintenance
