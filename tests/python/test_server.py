@@ -163,7 +163,7 @@ class TestParseQuestionsMd:
         assert questions[0]["id"] == "1"
         assert questions[0]["topic"] == "Namespaces"
         assert questions[0]["points"] == 5
-        assert questions[0]["namespace"] == "neptune"
+        assert questions[0]["namespace"] == "`neptune`"
 
     def test_second_question(self, tmp_exam_with_questions: Path):
         with patch.object(server, "EXAMS_DIR", tmp_exam_with_questions / "exams"):
